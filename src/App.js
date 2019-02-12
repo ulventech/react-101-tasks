@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { isEmpty } from 'lodash';
+import { isEmpty, isArray } from 'lodash';
 import { Form, Button, Input, FormGroup } from 'reactstrap';
+import { ToastContainer, toast } from 'react-toastify';
 import TaskList from './TaskList';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_API = 'https://us-central1-react-training-101.cloudfunctions.net/api/daniel';
 
@@ -22,13 +24,18 @@ class App extends Component {
   componentWillMount() {
     this.setState({ fetching: true });
     axios.get(`${BASE_API}/items`).then((resp) => {
-      this.setState({
-        fetching: false,
-        tasks: resp.data,
-      });
+      if (isArray(resp.data)) {
+        this.setState({
+          fetching: false,
+          tasks: resp.data,
+        });
+      } else {
+        this.setState({ fetching: false });  
+      }
     }).catch((err) => {
       console.error(err);
       this.setState({ fetching: false });
+      toast.error('Something whent wrong, please try again!');
     });
   }
 
@@ -53,9 +60,11 @@ class App extends Component {
         ],
         submitting: false,
       });
+      toast.success('Task sucessfully added!');
     }).catch((err) => {
       console.error(err);
       this.setState({ submitting: false });
+      toast.error('Something whent wrong, please try again!');
     });
   }
 
@@ -75,6 +84,7 @@ class App extends Component {
     }).catch((err) => {
       console.error(err);
       this.setState({ deleting: this.state.deleting.filter(id => id !== taskId) });
+      toast.error('Something whent wrong, please try again!');
     });
   }
 
@@ -87,6 +97,7 @@ class App extends Component {
   render() {
     return (
       <div className="container">
+        <ToastContainer />
         <TaskList
           tasks={this.state.tasks}
           isLoading={this.state.fetching}

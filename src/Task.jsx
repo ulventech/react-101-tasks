@@ -31,15 +31,23 @@ class Task extends PureComponent {
 
         return (
             <ListGroupItem>
-                <Button
-                    type="button"
-                    onClick={this.onDeleteClick}
-                    disabled={isDeleting}
-                    color="danger"
-                >
-                    {isDeleting ? 'Deleting...' : 'Delete'}
-                </Button>
-                {task}
+                <div className="row">
+                    <div className="col-md-1">
+                        <Button
+                            type="button"
+                            onClick={this.onDeleteClick}
+                            disabled={isDeleting}
+                            color="danger"
+                            size="sm"
+                            block
+                        >
+                            {isDeleting ? 'Deleting...' : 'Delete'}
+                        </Button>
+                    </div>
+                    <div className="col-md-11">
+                        <p>{task}</p>
+                    </div>
+                </div>
             </ListGroupItem>
         );
     }
