@@ -19,7 +19,6 @@ class App extends Component {
       this.setState({
         tasks: resp.data,
       });
-      console.log(resp.data);
     }).catch((err) => {
       console.error(err);
     });
@@ -33,9 +32,16 @@ class App extends Component {
       return;
     }
 
-    axios.post(`${BASE_API}/item`, data)
+    axios.post(`${BASE_API}/item`, {
+      task: task,
+    })
     .then((resp) => {
-      console.log(resp);
+      this.setState({
+        tasks: [
+          ...this.state.tasks,
+          resp.data,
+        ],
+      });
     }).catch((err) => {
       console.error(err);
     });
