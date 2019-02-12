@@ -15,6 +15,7 @@ class App extends Component {
       tasks: [],
       fetching: false,
       submitting: false,
+      deleting: [],
     };
   }
 
@@ -65,12 +66,15 @@ class App extends Component {
       return;
     }
 
+    this.setState({ deleting: [ ...this.state.deleting, taskId ] });
     axios.delete(`${BASE_API}/item/${taskId}`).then(() => {
       this.setState({
         tasks: this.state.tasks.filter(o => o.id !== taskId),
+        deleting: this.state.deleting.filter(id => id !== taskId),
       });
     }).catch((err) => {
       console.error(err);
+      this.setState({ deleting: this.state.deleting.filter(id => id !== taskId) });
     });
   }
 
@@ -87,6 +91,7 @@ class App extends Component {
           tasks={this.state.tasks}
           isLoading={this.state.fetching}
           onDelete={this.onDelete}
+          deleting={this.state.deleting}
         />
         <hr />
         <Form
