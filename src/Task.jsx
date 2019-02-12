@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { ListGroupItem } from 'reactstrap';
 
 class Task extends PureComponent {
     static propTypes = {
@@ -10,7 +11,9 @@ class Task extends PureComponent {
         const { task } = this.props;
 
         return (
-            <h3>{task}</h3>
+            <ListGroupItem>
+                {task}
+            </ListGroupItem>
         );
     }
 }
