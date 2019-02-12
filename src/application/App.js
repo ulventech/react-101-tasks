@@ -3,7 +3,7 @@ import axios from 'axios';
 import { isEmpty, isArray } from 'lodash';
 import { Form, Button, Input, FormGroup } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
-import TaskList from './TaskList';
+import TaskList from '../components/TaskList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
 
