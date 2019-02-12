@@ -58,6 +58,22 @@ class App extends Component {
     });
   }
 
+  onDelete = (taskId) => {
+    // Validate
+    if (isEmpty(taskId)) {
+      console.log('TaskId is required!');
+      return;
+    }
+
+    axios.delete(`${BASE_API}/item/${taskId}`).then(() => {
+      this.setState({
+        tasks: this.state.tasks.filter(o => o.id !== taskId),
+      });
+    }).catch((err) => {
+      console.error(err);
+    });
+  }
+
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -70,6 +86,7 @@ class App extends Component {
         <TaskList
           tasks={this.state.tasks}
           isLoading={this.state.fetching}
+          onDelete={this.onDelete}
         />
         <hr />
         <Form

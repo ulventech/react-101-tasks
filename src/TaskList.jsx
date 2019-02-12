@@ -10,6 +10,7 @@ class TaskList extends Component {
             task: PropTypes.string.isRequired,
         })),
         isLoading: PropTypes.bool.isRequired,
+        onDelete: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -17,7 +18,7 @@ class TaskList extends Component {
     }
 
     render() {
-        const { tasks, isLoading } = this.props;
+        const { tasks, isLoading, onDelete } = this.props;
 
         return (
             <div>
@@ -30,7 +31,9 @@ class TaskList extends Component {
                         {tasks.map(task => (
                             <TaskItem
                                 key={task.id}
+                                id={task.id}
                                 task={task.task}
+                                onDelete={onDelete}
                             />
                         ))}
                     </ListGroup>
