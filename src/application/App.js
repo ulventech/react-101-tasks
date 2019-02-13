@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Provider } from 'react-redux';
 import axios from 'axios';
 import { isEmpty, isArray } from 'lodash';
 import {
@@ -12,6 +13,7 @@ import {
   ModalFooter,
 } from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
+import store from '../services/store';
 import TaskList from '../components/TaskList';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -165,72 +167,74 @@ class App extends Component {
 
   render() {
     return (
-      <div className="container">
-        <ToastContainer />
-        <TaskList
-          tasks={this.state.tasks}
-          isLoading={this.state.fetching}
-          onDelete={this.onDelete}
-          deleting={this.state.deleting}
-          toggleEdit={this.toggleEdit}
-        />
-        <hr />
-        <Form
-          onSubmit={(e) => {
-            e.preventDefault();
-            this.onCreateTask(this.state);
-          }}
-        >
-          <FormGroup>
-            <Input
-              name="task"
-              value={this.state.task}
-              onChange={this.onChange}
-              type="text"
-              placeholder="Buy milk"
-              disabled={this.state.submitting}
-            />
-          </FormGroup>
-          <Button
-            type="submit"
-            color="success"
-            disabled={this.state.submitting}
+      <Provider store={store}>
+        <div className="container">
+          <ToastContainer />
+          <TaskList
+            tasks={this.state.tasks}
+            isLoading={this.state.fetching}
+            onDelete={this.onDelete}
+            deleting={this.state.deleting}
+            toggleEdit={this.toggleEdit}
+          />
+          <hr />
+          <Form
+            onSubmit={(e) => {
+              e.preventDefault();
+              this.onCreateTask(this.state);
+            }}
           >
-            {this.state.submitting ? 'Loading...' : 'Submit'}
-          </Button>
-        </Form>
-        <Modal
-          isOpen={!isEmpty(this.state.isEditing)}
-          toggle={() => {
-            this.toggleEdit('');
-          }}
-        >
-          <ModalHeader toggle={() => { this.toggleEdit(''); }}>
-            Edit task
-          </ModalHeader>
-          <ModalBody>
             <FormGroup>
               <Input
                 name="task"
                 value={this.state.task}
                 onChange={this.onChange}
+                type="text"
+                placeholder="Buy milk"
+                disabled={this.state.submitting}
               />
             </FormGroup>
-          </ModalBody>
-          <ModalFooter>
             <Button
-              type="button"
+              type="submit"
               color="success"
-              onClick={(e) => {
-                e.preventDefault();
-                this.onUpdate(this.state.isEditing);
-              }}
+              disabled={this.state.submitting}
             >
-              Update task
+              {this.state.submitting ? 'Loading...' : 'Submit'}
             </Button>
-          </ModalFooter>
-        </Modal>
-      </div>
+          </Form>
+          <Modal
+            isOpen={!isEmpty(this.state.isEditing)}
+            toggle={() => {
+              this.toggleEdit('');
+            }}
+          >
+            <ModalHeader toggle={() => { this.toggleEdit(''); }}>
+              Edit task
+            </ModalHeader>
+            <ModalBody>
+              <FormGroup>
+                <Input
+                  name="task"
+                  value={this.state.task}
+                  onChange={this.onChange}
+                />
+              </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                type="button"
+                color="success"
+                onClick={(e) => {
+                  e.preventDefault();
+                  this.onUpdate(this.state.isEditing);
+                }}
+              >
+                Update task
+              </Button>
+            </ModalFooter>
+          </Modal>
+        </div>
+      </Provider>
     );
   }
 }
