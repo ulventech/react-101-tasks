@@ -115,11 +115,25 @@ class App extends Component {
       return;
     }
 
-    const task = this.state.tasks.filter(t => t.id === taskId)[0];
-    task.task = this.state.task; // <- Bug?
+    const task = {
+      ...this.state.tasks.filter(t => t.id === taskId)[0] || {},
+    };
     if (!isEmpty(task)) {
+      task.task = this.state.task;
       axios.put(`${BASE_API}/item/${taskId}`, task).then((resp) => {
-        console.log(resp);
+        this.setState({
+          task: '',
+          tasks: this.state.tasks.map((t) => {
+            if (t.id === taskId) {
+              return {
+                ...resp.data,
+                id: taskId,
+              };
+            }
+            return t;
+          }),
+          isEditing: '',
+        });
       }).catch((err) => {
         console.error(err);
         toast.error('Something whent wrong, please try again!');
@@ -134,6 +148,16 @@ class App extends Component {
   }
 
   toggleEdit = (taskId = '') => {
+    if (!isEmpty(taskId)) {
+      const task = this.state.tasks.filter(t => t.id === taskId)[0];
+      if (!isEmpty(task)) {
+        this.setState({
+          task: task.task,
+        });
+      }
+    } else {
+      this.setState({ task: '' });
+    }
     this.setState({
       isEditing: taskId,
     });
