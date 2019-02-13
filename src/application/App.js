@@ -53,7 +53,7 @@ class App extends Component {
     // Validate
     const { task } = data;
     if (isEmpty(task)) {
-      console.log('Task is required!');
+      toast.error('Task text is required!');
       return;
     }
 
@@ -81,7 +81,7 @@ class App extends Component {
   onDelete = (taskId) => {
     // Validate
     if (isEmpty(taskId)) {
-      console.log('TaskId is required!');
+      toast.error('TaskId is required!');
       return;
     }
 
@@ -98,6 +98,35 @@ class App extends Component {
     });
   }
 
+  onUpdate = (taskId) => {
+    // Validate
+    if (isEmpty(this.state.task)) {
+      toast.error('Task text is required!');
+      return;
+    }
+    if (isEmpty(taskId)) {
+      toast.error('TaskId is required!');
+      return;
+    }
+
+    // Get full task from state
+    if (this.state.tasks.length <= 0) {
+      toast.error('Tasks needs to be loaded first');
+      return;
+    }
+
+    const task = this.state.tasks.filter(t => t.id === taskId)[0];
+    task.task = this.state.task; // <- Bug?
+    if (!isEmpty(task)) {
+      axios.put(`${BASE_API}/item/${taskId}`, task).then((resp) => {
+        console.log(resp);
+      }).catch((err) => {
+        console.error(err);
+        toast.error('Something whent wrong, please try again!');
+      });
+    }
+  }
+
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -111,7 +140,6 @@ class App extends Component {
   }
 
   render() {
-    console.log(this.state.isEditing);
     return (
       <div className="container">
         <ToastContainer />
@@ -149,9 +177,34 @@ class App extends Component {
         </Form>
         <Modal
           isOpen={!isEmpty(this.state.isEditing)}
-          toggle={this.toggleEdit}
+          toggle={() => {
+            this.toggleEdit('');
+          }}
         >
-          <p>This is a modal!</p>
+          <ModalHeader toggle={() => { this.toggleEdit(''); }}>
+            Edit task
+          </ModalHeader>
+          <ModalBody>
+            <FormGroup>
+              <Input
+                name="task"
+                value={this.state.task}
+                onChange={this.onChange}
+              />
+            </FormGroup>
+          </ModalBody>
+          <ModalFooter>
+            <Button
+              type="button"
+              color="success"
+              onClick={(e) => {
+                e.preventDefault();
+                this.onUpdate(this.state.isEditing);
+              }}
+            >
+              Update task
+            </Button>
+          </ModalFooter>
         </Modal>
       </div>
     );
