@@ -1,7 +1,16 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { isEmpty, isArray } from 'lodash';
-import { Form, Button, Input, FormGroup } from 'reactstrap';
+import {
+  Form,
+  Button,
+  Input,
+  FormGroup,
+  Modal,
+  ModalHeader,
+  ModalBody,
+  ModalFooter,
+} from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import TaskList from '../components/TaskList';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -18,6 +27,7 @@ class App extends Component {
       fetching: false,
       submitting: false,
       deleting: [],
+      isEditing: '',
     };
   }
 
@@ -94,7 +104,14 @@ class App extends Component {
     });
   }
 
+  toggleEdit = (taskId = '') => {
+    this.setState({
+      isEditing: taskId,
+    });
+  }
+
   render() {
+    console.log(this.state.isEditing);
     return (
       <div className="container">
         <ToastContainer />
@@ -103,6 +120,7 @@ class App extends Component {
           isLoading={this.state.fetching}
           onDelete={this.onDelete}
           deleting={this.state.deleting}
+          toggleEdit={this.toggleEdit}
         />
         <hr />
         <Form
@@ -129,6 +147,12 @@ class App extends Component {
             {this.state.submitting ? 'Loading...' : 'Submit'}
           </Button>
         </Form>
+        <Modal
+          isOpen={!isEmpty(this.state.isEditing)}
+          toggle={this.toggleEdit}
+        >
+          <p>This is a modal!</p>
+        </Modal>
       </div>
     );
   }

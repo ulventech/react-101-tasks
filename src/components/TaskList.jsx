@@ -12,6 +12,7 @@ class TaskList extends Component {
         isLoading: PropTypes.bool.isRequired,
         onDelete: PropTypes.func.isRequired,
         deleting: PropTypes.arrayOf(PropTypes.string),
+        toggleEdit: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
@@ -25,6 +26,7 @@ class TaskList extends Component {
             isLoading,
             onDelete,
             deleting,
+            toggleEdit,
         } = this.props;
 
         return (
@@ -42,6 +44,7 @@ class TaskList extends Component {
                                 task={task.task}
                                 onDelete={onDelete}
                                 deleting={deleting}
+                                toggleEdit={toggleEdit}
                             />
                         ))}
                     </ListGroup>

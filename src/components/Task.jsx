@@ -9,10 +9,16 @@ class Task extends PureComponent {
         task: PropTypes.string.isRequired,
         onDelete: PropTypes.func.isRequired,
         deleting: PropTypes.arrayOf(PropTypes.string),
+        toggleEdit: PropTypes.func.isRequired,
     }
 
     static defaultProps = {
         deleting: [],
+    }
+
+    onEditClick = (e) => {
+        e.preventDefault();
+        this.props.toggleEdit(this.props.id);
     }
 
     onDeleteClick = (e) => {
@@ -44,7 +50,18 @@ class Task extends PureComponent {
                             {isDeleting ? 'Deleting...' : 'Delete'}
                         </Button>
                     </div>
-                    <div className="col-md-11">
+                    <div className="col-md-1">
+                        <Button
+                            type="button"
+                            onClick={this.onEditClick}
+                            color="primary"
+                            size="sm"
+                            block
+                        >
+                            Edit
+                        </Button>
+                    </div>
+                    <div className="col-md-10">
                         <p>{task}</p>
                     </div>
                 </div>
