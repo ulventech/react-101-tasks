@@ -34,6 +34,7 @@ class App extends Component {
   }
 
   componentWillMount() {
+    /*
     this.setState({ fetching: true });
     axios.get(`${BASE_API}/items`).then((resp) => {
       if (isArray(resp.data)) {
@@ -49,6 +50,7 @@ class App extends Component {
       this.setState({ fetching: false });
       toast.error('Something whent wrong, please try again!');
     });
+    */
   }
 
   onCreateTask = (data = {}) => {
@@ -167,16 +169,10 @@ class App extends Component {
 
   render() {
     return (
-      <Provider store={store}>
+      <Provider store={store()}>
         <div className="container">
           <ToastContainer />
-          <TaskList
-            tasks={this.state.tasks}
-            isLoading={this.state.fetching}
-            onDelete={this.onDelete}
-            deleting={this.state.deleting}
-            toggleEdit={this.toggleEdit}
-          />
+          <TaskList />
           <hr />
           <Form
             onSubmit={(e) => {

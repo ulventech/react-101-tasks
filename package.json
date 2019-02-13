@@ -13,7 +13,8 @@
     "react-scripts": "2.1.5",
     "react-toastify": "^4.5.2",
     "reactstrap": "^7.1.0",
-    "redux": "^4.0.1"
+    "redux": "^4.0.1",
+    "redux-saga": "^1.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
