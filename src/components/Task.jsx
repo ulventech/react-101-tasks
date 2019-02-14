@@ -2,6 +2,11 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { isEmpty } from 'lodash';
 import { ListGroupItem, Button } from 'reactstrap';
+import styled from 'styled-components';
+
+const Text = styled.p`
+    margin-bottom: 0px;
+`;
 
 class Task extends PureComponent {
     static propTypes = {
@@ -37,32 +42,29 @@ class Task extends PureComponent {
 
         return (
             <ListGroupItem>
-                <div className="row">
-                    <div className="col-md-1">
+                <div className="d-flex justify-content-between">
+                    <div className="d-flex align-items-center h100 m-r-1">
+                        <Text>{task}</Text>
+                    </div>
+                    <div>
+                        <Button
+                            type="button"
+                            onClick={this.onEditClick}
+                            color="primary"
+                            size="sm"
+                            className="m-r-1"
+                        >
+                            Edit
+                        </Button>
                         <Button
                             type="button"
                             onClick={this.onDeleteClick}
                             disabled={isDeleting}
                             color="danger"
                             size="sm"
-                            block
                         >
                             {isDeleting ? 'Deleting...' : 'Delete'}
                         </Button>
-                    </div>
-                    <div className="col-md-1">
-                        <Button
-                            type="button"
-                            onClick={this.onEditClick}
-                            color="primary"
-                            size="sm"
-                            block
-                        >
-                            Edit
-                        </Button>
-                    </div>
-                    <div className="col-md-10">
-                        <p>{task}</p>
                     </div>
                 </div>
             </ListGroupItem>

@@ -1,11 +1,15 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import axios from 'axios';
-import { isEmpty, isArray } from 'lodash';
+import styled from 'styled-components';
+import { isEmpty } from 'lodash';
 import {
   Form,
   Button,
   Input,
+  InputGroup,
+  InputGroupAddon,
+  Label,
   FormGroup,
   Modal,
   ModalHeader,
@@ -15,10 +19,37 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import store from '../services/store';
 import TaskList from '../components/TaskList';
+import backgroundPhoto from '../assets/background.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
+import './App.css';
 
 const BASE_API = 'https://us-central1-react-training-101.cloudfunctions.net/api/daniel';
+
+const BackgroundImage = styled.img`
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  min-width: 100%;
+  min-height: 100%;
+`;
+
+const Card = styled.div`
+  margin-top: 25px;
+`;
+
+const Container = styled.div`
+  margin-bottom: 25px;
+`;
+
+const Title = styled.h1`
+  position: relative;
+  font-size: 3rem;
+  color: #FFFFFF;
+  text-align: center;
+  margin-top: 25px;
+  font-family: 'Libre Barcode 39 Text', cursive;
+`;
 
 class App extends Component {
   constructor(props) {
@@ -31,26 +62,6 @@ class App extends Component {
       deleting: [],
       isEditing: '',
     };
-  }
-
-  componentWillMount() {
-    /*
-    this.setState({ fetching: true });
-    axios.get(`${BASE_API}/items`).then((resp) => {
-      if (isArray(resp.data)) {
-        this.setState({
-          fetching: false,
-          tasks: resp.data,
-        });
-      } else {
-        this.setState({ fetching: false });  
-      }
-    }).catch((err) => {
-      console.error(err);
-      this.setState({ fetching: false });
-      toast.error('Something whent wrong, please try again!');
-    });
-    */
   }
 
   onCreateTask = (data = {}) => {
@@ -170,34 +181,49 @@ class App extends Component {
   render() {
     return (
       <Provider store={store()}>
-        <div className="container">
+        <BackgroundImage src={backgroundPhoto} />
+        <Container className="container">
           <ToastContainer />
+          <Title>
+            Task Listly
+          </Title>
           <TaskList />
-          <hr />
-          <Form
-            onSubmit={(e) => {
-              e.preventDefault();
-              this.onCreateTask(this.state);
-            }}
-          >
-            <FormGroup>
-              <Input
-                name="task"
-                value={this.state.task}
-                onChange={this.onChange}
-                type="text"
-                placeholder="Buy milk"
-                disabled={this.state.submitting}
-              />
-            </FormGroup>
-            <Button
-              type="submit"
-              color="success"
-              disabled={this.state.submitting}
-            >
-              {this.state.submitting ? 'Loading...' : 'Submit'}
-            </Button>
-          </Form>
+          <Card className="card">
+            <div className="card-body">
+              <Form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  this.onCreateTask(this.state);
+                }}
+              >
+                <FormGroup>
+                  <Label for="task-input">
+                    What's on your mind?
+                  </Label>
+                  <InputGroup>
+                    <Input
+                      id="task-input"
+                      name="task"
+                      value={this.state.task}
+                      onChange={this.onChange}
+                      type="text"
+                      placeholder="Buy milk"
+                      disabled={this.state.submitting}
+                    />
+                    <InputGroupAddon addonType="append">
+                      <Button
+                        type="submit"
+                        color="success"
+                        disabled={this.state.submitting}
+                      >
+                        {this.state.submitting ? 'Loading...' : 'Submit'}
+                      </Button>
+                    </InputGroupAddon>
+                  </InputGroup>
+                </FormGroup>
+              </Form>
+            </div>
+          </Card>
           <Modal
             isOpen={!isEmpty(this.state.isEditing)}
             toggle={() => {
@@ -229,7 +255,7 @@ class App extends Component {
               </Button>
             </ModalFooter>
           </Modal>
-        </div>
+        </Container>
       </Provider>
     );
   }
