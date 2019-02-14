@@ -10,6 +10,11 @@ const TaskListContainer = styled.div`
     margin-top: 25px;
 `;
 
+const LoadingText = styled.h3`
+    position: relative;
+    color: #FFFFFF;
+`;
+
 class TaskList extends Component {
     static propTypes = {
         Tasks: PropTypes.shape({
@@ -35,14 +40,13 @@ class TaskList extends Component {
                 getting,
             },
         } = this.props.Tasks;
-        console.log(this.props);
 
         return (
             <TaskListContainer>
                 {getting ? (
-                    <h3 className="text-center">
+                    <LoadingText className="text-center">
                         Loading...
-                    </h3>
+                    </LoadingText>
                 ) : (
                     <ListGroup>
                         {tasks.map(task => (

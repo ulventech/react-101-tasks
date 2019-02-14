@@ -4,12 +4,8 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
 import {
-  Form,
   Button,
   Input,
-  InputGroup,
-  InputGroupAddon,
-  Label,
   FormGroup,
   Modal,
   ModalHeader,
@@ -19,6 +15,7 @@ import {
 import { ToastContainer, toast } from 'react-toastify';
 import store from '../services/store';
 import TaskList from '../components/TaskList';
+import CreateTaskForm from '../forms/CreateTask';
 import backgroundPhoto from '../assets/background.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,10 +29,6 @@ const BackgroundImage = styled.img`
   left: 0px;
   min-width: 100%;
   min-height: 100%;
-`;
-
-const Card = styled.div`
-  margin-top: 25px;
 `;
 
 const Container = styled.div`
@@ -188,42 +181,7 @@ class App extends Component {
             Task Listly
           </Title>
           <TaskList />
-          <Card className="card">
-            <div className="card-body">
-              <Form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  this.onCreateTask(this.state);
-                }}
-              >
-                <FormGroup>
-                  <Label for="task-input">
-                    What's on your mind?
-                  </Label>
-                  <InputGroup>
-                    <Input
-                      id="task-input"
-                      name="task"
-                      value={this.state.task}
-                      onChange={this.onChange}
-                      type="text"
-                      placeholder="Buy milk"
-                      disabled={this.state.submitting}
-                    />
-                    <InputGroupAddon addonType="append">
-                      <Button
-                        type="submit"
-                        color="success"
-                        disabled={this.state.submitting}
-                      >
-                        {this.state.submitting ? 'Loading...' : 'Submit'}
-                      </Button>
-                    </InputGroupAddon>
-                  </InputGroup>
-                </FormGroup>
-              </Form>
-            </div>
-          </Card>
+          <CreateTaskForm />
           <Modal
             isOpen={!isEmpty(this.state.isEditing)}
             toggle={() => {
