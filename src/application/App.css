@@ -10,3 +10,8 @@
 .m-r-1 {
     margin-right: 1rem !important;
 }
+
+.invalid-feedback {
+    position: relative;
+    color: red;
+}

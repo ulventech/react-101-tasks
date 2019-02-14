@@ -1,18 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import {
-    Button,
-    Input,
-    FormGroup,
     Modal,
     ModalHeader,
     ModalBody,
-    ModalFooter,
 } from 'reactstrap';
 import { isEmpty } from 'lodash';
 import toast from 'react-toastify';
 import { connect } from 'react-redux';
 import { editTask, toggleEditModal } from '../services/Tasks/actions';
+import TaskForm from './Task';
 
 class EditTask extends Component {
     static propTypes = {
@@ -23,22 +20,9 @@ class EditTask extends Component {
         toggleEditModal: PropTypes.func.isRequired,
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            task: '',
-        };
-    }
-
-    onChange = (e) => {
-        this.setState({
-            [e.target.name]: e.target.value,
-        });
-    }
-
-    onUpdate = (taskId) => {
+    onUpdate = (taskId, values) => {
         // Validate
-        if (isEmpty(this.state.task)) {
+        if (isEmpty(values.task)) {
           toast.error('Task text is required!');
           return;
         }
@@ -58,10 +42,12 @@ class EditTask extends Component {
         };
 
         if (!isEmpty(task)) {
-          task.task = this.state.task;
+          task.task = values.task;
           this.props.editTask(taskId, task);
         }
     }
+
+    getTask = (taskId) => this.props.Tasks.tasks.filter(t => t.id === taskId)[0] || {};
 
     render() {
         const { isEditingTask } = this.props.Tasks;
@@ -77,26 +63,13 @@ class EditTask extends Component {
                     Edit task
                 </ModalHeader>
                 <ModalBody>
-                    <FormGroup>
-                        <Input
-                            name="task"
-                            value={this.state.task}
-                            onChange={this.onChange}
-                        />
-                    </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        type="button"
-                        color="success"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            this.onUpdate(isEditingTask);
+                    <TaskForm
+                        onSubmit={(values) => {
+                            this.onUpdate(isEditingTask, values);
                         }}
-                    >
-                        Update task
-                    </Button>
-                </ModalFooter>
+                        initialValues={this.getTask(isEditingTask)}
+                    />
+                </ModalBody>
             </Modal>
         );
     }
