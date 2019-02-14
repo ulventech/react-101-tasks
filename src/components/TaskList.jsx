@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ListGroup } from 'reactstrap';
 import { connect } from 'react-redux';
-import { getTasks } from '../services/Tasks/actions';
+import { getTasks, deleteTask, toggleEditModal } from '../services/Tasks/actions';
 import TaskItem from './Task';
 
 const TaskListContainer = styled.div`
@@ -27,6 +27,8 @@ class TaskList extends Component {
             }).isRequired,
         }).isRequired,
         getTasks: PropTypes.func.isRequired,
+        deleteTask: PropTypes.func.isRequired,
+        toggleEditModal: PropTypes.func.isRequired,
     }
     
     componentWillMount() {
@@ -54,6 +56,8 @@ class TaskList extends Component {
                                 key={task.id}
                                 id={task.id}
                                 task={task.task}
+                                deleteTask={this.props.deleteTask}
+                                toggleEdit={this.props.toggleEditModal}
                             />
                         ))}
                     </ListGroup>
@@ -69,6 +73,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = {
     getTasks,
+    deleteTask,
+    toggleEditModal,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TaskList);

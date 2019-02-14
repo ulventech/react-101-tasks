@@ -12,7 +12,7 @@ class Task extends PureComponent {
     static propTypes = {
         id: PropTypes.string.isRequired,
         task: PropTypes.string.isRequired,
-        onDelete: PropTypes.func.isRequired,
+        deleteTask: PropTypes.func.isRequired,
         deleting: PropTypes.arrayOf(PropTypes.string),
         toggleEdit: PropTypes.func.isRequired,
     }
@@ -28,7 +28,7 @@ class Task extends PureComponent {
 
     onDeleteClick = (e) => {
         e.preventDefault();
-        this.props.onDelete(this.props.id);
+        this.props.deleteTask(this.props.id);
     }
 
     isDeleting = () => {

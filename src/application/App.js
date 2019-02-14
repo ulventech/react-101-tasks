@@ -3,19 +3,11 @@ import { Provider } from 'react-redux';
 import axios from 'axios';
 import styled from 'styled-components';
 import { isEmpty } from 'lodash';
-import {
-  Button,
-  Input,
-  FormGroup,
-  Modal,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-} from 'reactstrap';
 import { ToastContainer, toast } from 'react-toastify';
 import store from '../services/store';
 import TaskList from '../components/TaskList';
 import CreateTaskForm from '../forms/CreateTask';
+import EditTaskForm from '../forms/EditTask';
 import backgroundPhoto from '../assets/background.jpg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.css';
@@ -106,49 +98,6 @@ class App extends Component {
     });
   }
 
-  onUpdate = (taskId) => {
-    // Validate
-    if (isEmpty(this.state.task)) {
-      toast.error('Task text is required!');
-      return;
-    }
-    if (isEmpty(taskId)) {
-      toast.error('TaskId is required!');
-      return;
-    }
-
-    // Get full task from state
-    if (this.state.tasks.length <= 0) {
-      toast.error('Tasks needs to be loaded first');
-      return;
-    }
-
-    const task = {
-      ...this.state.tasks.filter(t => t.id === taskId)[0] || {},
-    };
-    if (!isEmpty(task)) {
-      task.task = this.state.task;
-      axios.put(`${BASE_API}/item/${taskId}`, task).then((resp) => {
-        this.setState({
-          task: '',
-          tasks: this.state.tasks.map((t) => {
-            if (t.id === taskId) {
-              return {
-                ...resp.data,
-                id: taskId,
-              };
-            }
-            return t;
-          }),
-          isEditing: '',
-        });
-      }).catch((err) => {
-        console.error(err);
-        toast.error('Something whent wrong, please try again!');
-      });
-    }
-  }
-
   onChange = (e) => {
     this.setState({
       [e.target.name]: e.target.value,
@@ -182,37 +131,7 @@ class App extends Component {
           </Title>
           <TaskList />
           <CreateTaskForm />
-          <Modal
-            isOpen={!isEmpty(this.state.isEditing)}
-            toggle={() => {
-              this.toggleEdit('');
-            }}
-          >
-            <ModalHeader toggle={() => { this.toggleEdit(''); }}>
-              Edit task
-            </ModalHeader>
-            <ModalBody>
-              <FormGroup>
-                <Input
-                  name="task"
-                  value={this.state.task}
-                  onChange={this.onChange}
-                />
-              </FormGroup>
-            </ModalBody>
-            <ModalFooter>
-              <Button
-                type="button"
-                color="success"
-                onClick={(e) => {
-                  e.preventDefault();
-                  this.onUpdate(this.state.isEditing);
-                }}
-              >
-                Update task
-              </Button>
-            </ModalFooter>
-          </Modal>
+          <EditTaskForm />
         </Container>
       </Provider>
     );
